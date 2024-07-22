@@ -6,11 +6,11 @@ import { VideoDBType } from '../db/video-db-types';
 
 // Схема валидации для входных данных
 const createVideoSchema = Joi.object({
-    title: Joi.string().required(),
-    author: Joi.string().required(),
+    title: Joi.string().max(40).required(),
+    author: Joi.string().max(20).required(),
     availableResolutions: Joi.array().items(
         Joi.string().valid(...Object.values(Resolutions))
-    ).required()
+    ).min(1).required()
 });
 
 
