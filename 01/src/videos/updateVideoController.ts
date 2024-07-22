@@ -1,36 +1,34 @@
 import { Request, Response } from 'express';
 import Joi from 'joi';
 import { db } from '../db/db';
-import {Resolutions} from "../db/video-db-types";
+import { Resolutions } from '../db/video-db-types';
 
-// Схема валидации для параметров пути
+// Validation schema for path parameters
 const findVideoParamsSchema = Joi.object({
     id: Joi.number().integer().required()
 });
 
-// Схема валидации для данных тела запроса
+// Validation schema for request body
 const updateVideoSchema = Joi.object({
-    title: Joi.string().max(40),
-    author: Joi.string().max(20),
+    title: Joi.string().max(40).allow(null),
+    author: Joi.string().max(20).allow(null),
     availableResolutions: Joi.array().items(
         Joi.string().valid(...Object.values(Resolutions))
-    ),
-    canBeDownloaded: Joi.boolean(),
+    ).allow(null),
+    canBeDownloaded: Joi.boolean().allow(null),
     minAgeRestriction: Joi.number().integer().min(0).max(20).allow(null),
-    publicationDate: Joi.string().isoDate()
+    publicationDate: Joi.string().isoDate().allow(null)
 });
-
-
 
 export const updateVideoController = (req: Request, res: Response<any>) => {
     const { error: paramsError, value: paramsValue } = findVideoParamsSchema.validate(req.params);
-    const { error: bodyError, value: bodyValue } = updateVideoSchema.validate(req.body);
+    const { error: bodyError, value: bodyValue } = updateVideoSchema.validate(req.body, { abortEarly: false });
 
     if (paramsError) {
         return res.status(400).json({
             errorsMessages: paramsError.details.map(err => ({
-                message: err.message,
-                field: err.context?.key
+                message: err.message || null,
+                field: err.context?.key || null
             }))
         });
     }
@@ -38,8 +36,8 @@ export const updateVideoController = (req: Request, res: Response<any>) => {
     if (bodyError) {
         return res.status(400).json({
             errorsMessages: bodyError.details.map(err => ({
-                message: err.message,
-                field: err.context?.key
+                message: err.message || null,
+                field: err.context?.key || null
             }))
         });
     }

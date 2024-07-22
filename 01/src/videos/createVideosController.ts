@@ -4,24 +4,24 @@ import { db } from '../db/db';
 import { Resolutions } from '../enum/enums';
 import { VideoDBType } from '../db/video-db-types';
 
-// Схема валидации для входных данных
+// Validation schema for input data
 const createVideoSchema = Joi.object({
     title: Joi.string().max(40).required(),
     author: Joi.string().max(20).required(),
     availableResolutions: Joi.array().items(
         Joi.string().valid(...Object.values(Resolutions))
-    ).min(1).required()
+    ).min(1).allow(null)
 });
 
-// Контроллер для создания видео
-export const createVideosController = (req: Request, res: Response) => {
+// Controller for creating a video
+export const createVideosController = (req: Request, res: Response<any>) => {
     const { error, value } = createVideoSchema.validate(req.body, { abortEarly: false });
 
     if (error) {
         return res.status(400).json({
             errorsMessages: error.details.map(err => ({
-                message: err.message,
-                field: err.context?.key
+                message: err.message || null,
+                field: err.context?.key || null
             }))
         });
     }
