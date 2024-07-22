@@ -10,13 +10,13 @@ const findVideoParamsSchema = Joi.object({
 
 // Схема валидации для данных тела запроса
 const updateVideoSchema = Joi.object({
-    title: Joi.string(),
-    author: Joi.string(),
+    title: Joi.string().max(40),
+    author: Joi.string().max(20),
     availableResolutions: Joi.array().items(
         Joi.string().valid(...Object.values(Resolutions))
     ),
     canBeDownloaded: Joi.boolean(),
-    minAgeRestriction: Joi.number().integer().min(0).allow(null),
+    minAgeRestriction: Joi.number().integer().min(0).max(20).allow(null),
     publicationDate: Joi.string().isoDate()
 });
 

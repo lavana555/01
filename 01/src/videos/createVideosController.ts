@@ -13,9 +13,10 @@ const createVideoSchema = Joi.object({
     ).min(1).required()
 });
 
-
+// Контроллер для создания видео
 export const createVideosController = (req: Request, res: Response) => {
-    const { error, value } = createVideoSchema.validate(req.body);
+    const { error, value } = createVideoSchema.validate(req.body, { abortEarly: false });
+
     if (error) {
         return res.status(400).json({
             errorsMessages: error.details.map(err => ({
@@ -43,4 +44,4 @@ export const createVideosController = (req: Request, res: Response) => {
     db.videos.push(newVideo);
 
     return res.status(201).json(newVideo);
-}
+};
