@@ -11,7 +11,7 @@ app.use(express.json())
 app.use(cors())
 
 app.get('/', (req, res) =>{
-    res.status(200).json({version: '1.0'})
+    res.status(200).json({version: '1.0.1'})
 })
 app.delete(SETTINGS.PATH.TESTING, resetVideoController);
 app.get(SETTINGS.PATH.VIDEOS, getVideosController)
