@@ -10,8 +10,8 @@ const findVideoParamsSchema = Joi.object({
 
 // Validation schema for request body
 const updateVideoSchema = Joi.object({
-    title: Joi.string().max(40).allow(null),
-    author: Joi.string().max(20).allow(null),
+    title: Joi.string().max(40),
+    author: Joi.string().max(20),
     availableResolutions: Joi.array().items(
         Joi.string().valid(...Object.values(Resolutions))
     ).allow(null),

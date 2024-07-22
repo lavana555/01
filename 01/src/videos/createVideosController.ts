@@ -4,13 +4,18 @@ import { db } from '../db/db';
 import { Resolutions } from '../enum/enums';
 import { VideoDBType } from '../db/video-db-types';
 
-// Validation schema for input data
+// Validation schema for input data with custom error messages
 const createVideoSchema = Joi.object({
     title: Joi.string().max(40).required(),
     author: Joi.string().max(20).required(),
     availableResolutions: Joi.array().items(
-        Joi.string().valid(...Object.values(Resolutions))
-    ).min(1).allow(null)
+        Joi.string().valid(...Object.values(Resolutions)).messages({
+            'any.only': 'availableResolutions contains invalid resolution'
+        })
+    ).min(1).allow(null).messages({
+        'array.min': 'availableResolutions contains invalid resolution',
+        'array.base': 'availableResolutions must be an array'
+    })
 });
 
 // Controller for creating a video
@@ -21,7 +26,7 @@ export const createVideosController = (req: Request, res: Response<any>) => {
         return res.status(400).json({
             errorsMessages: error.details.map(err => ({
                 message: err.message || null,
-                field: err.context?.key || null
+                field: err.path[0] || null
             }))
         });
     }
