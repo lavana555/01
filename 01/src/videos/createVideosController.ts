@@ -33,7 +33,7 @@ export const createVideosController = (req: Request, res: Response) => {
         id: Math.floor(Date.now() + Math.random() * 1000),
         title: value.title,
         author: value.author,
-        canBeDownloaded: true,
+        canBeDownloaded: false,
         minAgeRestriction: null,
         createdAt: createdAt.toISOString(),
         publicationDate: publicationDate.toISOString(),

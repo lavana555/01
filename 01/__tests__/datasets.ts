@@ -9,7 +9,7 @@ export const video1: any /*VideoDBType*/ = {
     id: Date.now() + Math.random(),
     title: 't' + Date.now() + Math.random(),
     author: 'a' + Date.now() + Math.random(),
-    canBeDownloaded: true,
+    canBeDownloaded: false,
     minAgeRestriction: null,
     createdAt: new Date().toISOString(),
     publicationDate: new Date().toISOString(),
